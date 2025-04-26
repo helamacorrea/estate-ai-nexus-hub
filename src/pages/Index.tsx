@@ -2,31 +2,44 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Calendar, Users, Search, Settings, BarChart } from "lucide-react";
+import { 
+  ChevronRight, 
+  MessageSquare, 
+  Users, 
+  Calendar,
+  TrendingUp,
+  Settings,
+  Webhook,
+  BarChart 
+} from "lucide-react";
 
 const Index = () => {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-10 bg-white shadow-sm">
+      <header className="sticky top-0 z-10 bg-[#0A1828] shadow-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-estate-primary">
-              <span className="text-lg font-bold text-white">R</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0FFCBE]">
+              <span className="text-lg font-bold text-[#0A1828]">G</span>
             </div>
-            <span className="text-lg font-bold">RealEstateAI</span>
+            <span className="text-lg font-bold text-white">Gabbi AI</span>
           </div>
           <nav className="hidden items-center space-x-8 md:flex">
-            <Link to="/" className="font-medium text-gray-700 hover:text-estate-primary">Home</Link>
-            <Link to="/#features" className="font-medium text-gray-700 hover:text-estate-primary">Features</Link>
-            <Link to="/#pricing" className="font-medium text-gray-700 hover:text-estate-primary">Pricing</Link>
-            <Link to="/#testimonials" className="font-medium text-gray-700 hover:text-estate-primary">Testimonials</Link>
+            <Link to="/" className="font-medium text-gray-200 hover:text-[#0FFCBE]">Início</Link>
+            <Link to="/#features" className="font-medium text-gray-200 hover:text-[#0FFCBE]">Recursos</Link>
+            <Link to="/#pricing" className="font-medium text-gray-200 hover:text-[#0FFCBE]">Preços</Link>
+            <Link to="/#testimonials" className="font-medium text-gray-200 hover:text-[#0FFCBE]">Depoimentos</Link>
           </nav>
           <div className="flex items-center space-x-4">
             <Link to="/login">
-              <Button variant="outline">Login</Button>
+              <Button variant="outline" className="border-[#0FFCBE] text-[#0FFCBE] hover:bg-[#0FFCBE] hover:text-[#0A1828]">
+                Entrar
+              </Button>
             </Link>
             <Link to="/login">
-              <Button>Get Started</Button>
+              <Button className="bg-[#0FFCBE] text-[#0A1828] hover:bg-[#0FFCBE]/90">
+                Começar Agora
+              </Button>
             </Link>
           </div>
         </div>
@@ -34,33 +47,33 @@ const Index = () => {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-blue-50 to-white py-20">
+        <section className="bg-[#0A1828] py-20">
           <div className="container mx-auto px-4">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div className="animate-reveal space-y-6">
-                <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl">
-                  Revolutionize Your <span className="text-estate-primary">Real Estate</span> Business with AI
+                <h1 className="text-4xl font-bold leading-tight tracking-tighter text-white md:text-5xl lg:text-6xl">
+                  Revolucione seu Negócio Imobiliário com <span className="text-[#0FFCBE]">Gabbi AI</span>
                 </h1>
-                <p className="text-lg text-gray-600">
-                  Our AI assistant handles inquiries, schedules viewings, and nurtures leads 24/7 so you can focus on closing deals.
+                <p className="text-lg text-gray-300">
+                  Nossa assistente virtual trabalha 24/7, gerencia consultas, agenda visitas e nutre leads automaticamente para que você possa focar em fechar negócios.
                 </p>
                 <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                   <Link to="/login">
-                    <Button size="lg" className="w-full sm:w-auto">
-                      Start Free Trial
+                    <Button size="lg" className="w-full bg-[#0FFCBE] text-[#0A1828] hover:bg-[#0FFCBE]/90 sm:w-auto">
+                      Teste Grátis
                       <ChevronRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                    Watch Demo
+                  <Button size="lg" variant="outline" className="w-full border-[#0FFCBE] text-[#0FFCBE] hover:bg-[#0FFCBE] hover:text-[#0A1828] sm:w-auto">
+                    Ver Demo
                   </Button>
                 </div>
               </div>
               <div className="relative animate-reveal">
-                <div className="absolute -top-4 -left-4 h-72 w-72 rounded-full bg-estate-accent opacity-50 blur-3xl"></div>
+                <div className="absolute -top-4 -left-4 h-72 w-72 rounded-full bg-[#0FFCBE]/20 blur-3xl"></div>
                 <img 
                   src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80" 
-                  alt="Real Estate AI Dashboard" 
+                  alt="Dashboard Gabbi AI" 
                   className="relative z-10 rounded-lg shadow-xl"
                 />
               </div>
@@ -69,56 +82,58 @@ const Index = () => {
         </section>
 
         {/* Feature Section */}
-        <section id="features" className="py-20">
+        <section id="features" className="bg-white py-20">
           <div className="container mx-auto px-4">
             <div className="mx-auto mb-16 max-w-2xl text-center">
-              <h2 className="mb-4 text-3xl font-bold md:text-4xl">Powerful AI Features for Real Estate</h2>
+              <h2 className="mb-4 text-3xl font-bold text-[#0A1828] md:text-4xl">
+                Recursos Poderosos da Gabbi AI
+              </h2>
               <p className="text-gray-600">
-                Our AI-powered platform is designed specifically for real estate professionals to automate tasks, enhance customer engagement, and increase conversions.
+                Nossa plataforma com IA foi projetada especificamente para profissionais do mercado imobiliário automatizarem tarefas e aumentarem suas vendas.
               </p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {[
                 {
-                  title: "Smart Scheduling",
-                  description: "Automatically schedule property viewings and meetings by syncing with your calendar.",
+                  title: "Respostas Instantâneas",
+                  description: "Atendimento automático via WhatsApp com respostas naturais e humanizadas 24/7.",
+                  icon: MessageSquare,
+                },
+                {
+                  title: "Qualificação de Leads",
+                  description: "A IA analisa conversas para qualificar leads com base em intenção e orçamento.",
+                  icon: Users,
+                },
+                {
+                  title: "Agendamento Inteligente",
+                  description: "Agenda automaticamente visitas aos imóveis sincronizando com seu calendário.",
                   icon: Calendar,
                 },
                 {
-                  title: "Lead Qualification",
-                  description: "AI analyzes conversations to qualify leads based on intent, budget, and timeline.",
-                  icon: Users,
-                },
-                {
-                  title: "Property Matching",
-                  description: "Match clients with properties that fit their preferences and requirements.",
-                  icon: Search,
-                },
-                {
-                  title: "Customizable AI",
-                  description: "Adjust AI's behavior, voice, and approach to align with your brand and business goals.",
+                  title: "Recomendações Personalizadas",
+                  description: "Combina clientes com imóveis que atendem suas preferências e requisitos.",
                   icon: Settings,
                 },
                 {
-                  title: "Performance Analytics",
-                  description: "Detailed metrics and insights to optimize your lead generation and conversion.",
-                  icon: BarChart,
+                  title: "Integração com Canais",
+                  description: "Conecta-se perfeitamente com seus canais de publicidade existentes.",
+                  icon: Webhook,
                 },
                 {
-                  title: "CRM Integration",
-                  description: "Seamlessly connect with your existing CRM and tools for a unified workflow.",
-                  icon: Users,
-                },
+                  title: "Análise de Desempenho",
+                  description: "Métricas detalhadas e insights para otimizar sua geração de leads.",
+                  icon: BarChart,
+                }
               ].map((feature, index) => (
                 <div 
                   key={index} 
-                  className="feature-card rounded-lg border p-6 transition-all hover:border-estate-primary hover:shadow-md"
+                  className="feature-card rounded-lg border p-6 transition-all hover:border-[#0FFCBE] hover:shadow-md"
                 >
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-md bg-estate-accent">
-                    <feature.icon className="feature-icon h-6 w-6 text-estate-primary" />
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-md bg-[#0FFCBE]/10">
+                    <feature.icon className="feature-icon h-6 w-6 text-[#0A1828]" />
                   </div>
-                  <h3 className="mb-2 text-xl font-semibold">{feature.title}</h3>
+                  <h3 className="mb-2 text-xl font-semibold text-[#0A1828]">{feature.title}</h3>
                   <p className="text-gray-600">{feature.description}</p>
                 </div>
               ))}
@@ -130,89 +145,93 @@ const Index = () => {
         <section id="pricing" className="bg-gray-50 py-20">
           <div className="container mx-auto px-4">
             <div className="mx-auto mb-16 max-w-2xl text-center">
-              <h2 className="mb-4 text-3xl font-bold md:text-4xl">Simple, Transparent Pricing</h2>
+              <h2 className="mb-4 text-3xl font-bold text-[#0A1828] md:text-4xl">
+                Preços Simples e Transparentes
+              </h2>
               <p className="text-gray-600">
-                Choose the plan that's right for your business. All plans include a 14-day free trial.
+                Escolha o plano ideal para seu negócio. Todos os planos incluem teste grátis de 14 dias.
               </p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-3">
               {[
                 {
-                  name: "Starter",
-                  price: "$49",
-                  description: "Perfect for individual agents",
+                  name: "Inicial",
+                  price: "R$249",
+                  description: "Perfeito para agentes individuais",
                   features: [
-                    "AI Assistant for basic inquiries",
-                    "50 AI conversations/month",
-                    "Calendar integration",
-                    "Email notifications",
-                    "Basic analytics"
+                    "Assistente AI para consultas básicas",
+                    "50 conversas AI/mês",
+                    "Integração com calendário",
+                    "Notificações por email",
+                    "Análise básica"
                   ],
                   popular: false
                 },
                 {
-                  name: "Professional",
-                  price: "$99",
-                  description: "Ideal for growing teams",
+                  name: "Profissional",
+                  price: "R$499",
+                  description: "Ideal para equipes em crescimento",
                   features: [
-                    "Everything in Starter",
-                    "Unlimited AI conversations",
-                    "Full CRM integration",
-                    "Advanced lead scoring",
-                    "Custom AI configuration",
-                    "Team collaboration"
+                    "Tudo do plano Inicial",
+                    "Conversas AI ilimitadas",
+                    "Integração completa de CRM",
+                    "Score avançado de leads",
+                    "Configuração personalizada da AI",
+                    "Colaboração em equipe"
                   ],
                   popular: true
                 },
                 {
-                  name: "Enterprise",
-                  price: "$199",
-                  description: "For large brokerages & teams",
+                  name: "Empresarial",
+                  price: "R$999",
+                  description: "Para imobiliárias e grandes equipes",
                   features: [
-                    "Everything in Professional",
-                    "White-labeled AI assistant",
-                    "API access",
-                    "Advanced customization",
-                    "Priority support",
-                    "Dedicated account manager"
+                    "Tudo do plano Profissional",
+                    "Assistente AI com marca própria",
+                    "Acesso à API",
+                    "Personalização avançada",
+                    "Suporte prioritário",
+                    "Gerente de conta dedicado"
                   ],
                   popular: false
                 }
               ].map((plan, index) => (
                 <div 
                   key={index} 
-                  className={`relative rounded-lg border bg-white p-6 shadow-sm transition-all hover:shadow-md ${
-                    plan.popular ? "border-estate-primary" : ""
+                  className={`relative rounded-lg bg-white p-6 shadow-sm transition-all hover:shadow-md ${
+                    plan.popular ? "border-2 border-[#0FFCBE]" : "border"
                   }`}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-4 left-0 right-0 mx-auto w-fit rounded-full bg-estate-primary px-3 py-1 text-xs font-semibold text-white">
-                      Most Popular
+                    <div className="absolute -top-4 left-0 right-0 mx-auto w-fit rounded-full bg-[#0FFCBE] px-3 py-1 text-xs font-semibold text-[#0A1828]">
+                      Mais Popular
                     </div>
                   )}
-                  <h3 className="mb-2 text-xl font-semibold">{plan.name}</h3>
+                  <h3 className="mb-2 text-xl font-semibold text-[#0A1828]">{plan.name}</h3>
                   <div className="mb-4">
-                    <span className="text-3xl font-bold">{plan.price}</span>
-                    <span className="text-gray-600">/month</span>
+                    <span className="text-3xl font-bold text-[#0A1828]">{plan.price}</span>
+                    <span className="text-gray-600">/mês</span>
                   </div>
                   <p className="mb-6 text-gray-600">{plan.description}</p>
                   <ul className="mb-6 space-y-2">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-center">
-                        <svg className="mr-2 h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span className="text-sm">{feature}</span>
+                        <TrendingUp className="mr-2 h-4 w-4 text-[#0FFCBE]" />
+                        <span className="text-sm text-gray-600">{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <Link to="/login" className="w-full">
                     <Button 
                       variant={plan.popular ? "default" : "outline"} 
-                      className="w-full"
+                      className={`w-full ${
+                        plan.popular 
+                          ? "bg-[#0FFCBE] text-[#0A1828] hover:bg-[#0FFCBE]/90" 
+                          : "border-[#0A1828] text-[#0A1828] hover:bg-[#0A1828] hover:text-white"
+                      }`}
                     >
-                      Get Started
+                      Começar Agora
                     </Button>
                   </Link>
                 </div>
@@ -225,33 +244,33 @@ const Index = () => {
         <section id="testimonials" className="py-20">
           <div className="container mx-auto px-4">
             <div className="mx-auto mb-16 max-w-2xl text-center">
-              <h2 className="mb-4 text-3xl font-bold md:text-4xl">What Our Clients Say</h2>
+              <h2 className="mb-4 text-3xl font-bold text-[#0A1828] md:text-4xl">O que Nossos Clientes Dizem</h2>
               <p className="text-gray-600">
-                Real estate professionals across the country are transforming their business with our AI assistant.
+                Profissionais do mercado imobiliário em todo o país estão transformando seus negócios com nossa assistente virtual.
               </p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {[
                 {
-                  name: "Sarah Johnson",
-                  role: "Real Estate Agent",
+                  name: "Ana Silva",
+                  role: "Corretora de Imóveis",
                   company: "Century 21",
-                  testimonial: "The AI assistant has been a game-changer. I'm capturing leads I would have missed and my response time has gone from hours to seconds.",
+                  testimonial: "A Gabbi é incrível! Estou capturando leads que antes perdia e meu tempo de resposta passou de horas para segundos.",
                   image: "https://randomuser.me/api/portraits/women/42.jpg"
                 },
                 {
-                  name: "Michael Rodriguez",
-                  role: "Broker",
+                  name: "Ricardo Santos",
+                  role: "Corretor",
                   company: "Keller Williams",
-                  testimonial: "We've seen a 40% increase in qualified leads since implementing this AI solution. The ability to customize the AI behavior is fantastic.",
+                  testimonial: "Vimos um aumento de 40% em leads qualificados desde que implementamos a Gabbi. A capacidade de personalizar o comportamento da IA é fantástica.",
                   image: "https://randomuser.me/api/portraits/men/32.jpg"
                 },
                 {
-                  name: "Jennifer Smith",
-                  role: "Team Lead",
+                  name: "Maria Costa",
+                  role: "Líder de Equipe",
                   company: "RE/MAX",
-                  testimonial: "The analytics and insights we get from the platform help us continually improve our sales process and identify high-value opportunities.",
+                  testimonial: "As análises e insights que obtemos da plataforma nos ajudam a melhorar continuamente nosso processo de vendas e identificar oportunidades.",
                   image: "https://randomuser.me/api/portraits/women/68.jpg"
                 }
               ].map((testimonial, index) => (
@@ -266,7 +285,7 @@ const Index = () => {
                       className="mr-4 h-12 w-12 rounded-full object-cover"
                     />
                     <div>
-                      <h4 className="font-semibold">{testimonial.name}</h4>
+                      <h4 className="font-semibold text-[#0A1828]">{testimonial.name}</h4>
                       <p className="text-sm text-gray-600">{testimonial.role}, {testimonial.company}</p>
                     </div>
                   </div>
@@ -278,21 +297,27 @@ const Index = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-estate-primary py-16 text-white">
+        <section className="bg-[#0A1828] py-16">
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-3xl text-center">
-              <h2 className="mb-6 text-3xl font-bold md:text-4xl">Ready to Transform Your Real Estate Business?</h2>
-              <p className="mb-8 text-lg">
-                Join thousands of real estate professionals using AI to automate tasks, respond instantly to inquiries, and close more deals.
+              <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">
+                Pronto para Transformar seu Negócio Imobiliário?
+              </h2>
+              <p className="mb-8 text-lg text-gray-300">
+                Junte-se a milhares de profissionais do mercado imobiliário usando IA para automatizar tarefas, responder instantaneamente a consultas e fechar mais negócios.
               </p>
               <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                 <Link to="/login">
-                  <Button size="lg" variant="secondary" className="w-full sm:w-auto">
-                    Start Your Free Trial
+                  <Button size="lg" className="w-full bg-[#0FFCBE] text-[#0A1828] hover:bg-[#0FFCBE]/90 sm:w-auto">
+                    Começar Teste Grátis
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-estate-primary">
-                  Schedule a Demo
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="w-full border-[#0FFCBE] text-[#0FFCBE] hover:bg-[#0FFCBE] hover:text-[#0A1828] sm:w-auto"
+                >
+                  Agendar Demo
                 </Button>
               </div>
             </div>
@@ -300,52 +325,52 @@ const Index = () => {
         </section>
       </main>
 
-      <footer className="bg-gray-900 py-12 text-gray-300">
+      <footer className="bg-[#0A1828] py-12 text-gray-300">
         <div className="container mx-auto px-4">
           <div className="grid gap-8 md:grid-cols-4">
             <div>
               <div className="flex items-center space-x-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white">
-                  <span className="text-lg font-bold text-estate-primary">R</span>
+                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0FFCBE]">
+                  <span className="text-lg font-bold text-[#0A1828]">G</span>
                 </div>
-                <span className="text-lg font-bold text-white">RealEstateAI</span>
+                <span className="text-lg font-bold text-white">Gabbi AI</span>
               </div>
               <p className="mt-4 text-sm">
-                Empowering real estate professionals with AI technology to automate tasks and grow their business.
+                Capacitando profissionais do mercado imobiliário com tecnologia de IA para automatizar tarefas e expandir seus negócios.
               </p>
             </div>
             
             <div>
-              <h4 className="mb-4 text-lg font-semibold text-white">Product</h4>
+              <h4 className="mb-4 text-lg font-semibold text-white">Produto</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white">Features</a></li>
-                <li><a href="#" className="hover:text-white">Pricing</a></li>
-                <li><a href="#" className="hover:text-white">Integrations</a></li>
-                <li><a href="#" className="hover:text-white">Updates</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Recursos</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Preços</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Integrações</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Atualizações</a></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="mb-4 text-lg font-semibold text-white">Company</h4>
+              <h4 className="mb-4 text-lg font-semibold text-white">Empresa</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white">About Us</a></li>
-                <li><a href="#" className="hover:text-white">Careers</a></li>
-                <li><a href="#" className="hover:text-white">Blog</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Sobre Nós</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Carreiras</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Blog</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Contato</a></li>
               </ul>
             </div>
             
             <div>
               <h4 className="mb-4 text-lg font-semibold text-white">Legal</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-white">Cookie Policy</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Política de Privacidade</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Termos de Serviço</a></li>
+                <li><a href="#" className="hover:text-[#0FFCBE]">Política de Cookies</a></li>
               </ul>
             </div>
           </div>
           <div className="mt-12 border-t border-gray-800 pt-8 text-center text-sm">
-            <p>&copy; {new Date().getFullYear()} RealEstateAI. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Gabbi AI. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
