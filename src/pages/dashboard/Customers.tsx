@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, MessageCircle, Phone, Edit } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "@/components/ui/use-toast";
 
 interface Customer {
@@ -246,7 +247,7 @@ const Customers = () => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search customers..."
+            placeholder="Buscar clientes..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -259,7 +260,7 @@ const Customers = () => {
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
+              <SelectItem value="all">Todos Status</SelectItem>
               {statuses.map((status) => (
                 <SelectItem key={status} value={status}>{status}</SelectItem>
               ))}
@@ -268,10 +269,10 @@ const Customers = () => {
           
           <Select value={modalityFilter || undefined} onValueChange={(value) => setModalityFilter(value || null)}>
             <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Modality" />
+              <SelectValue placeholder="Modalidade" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="all">Todas Modalidades</SelectItem>
               {modalities.map((modality) => (
                 <SelectItem key={modality} value={modality}>{modality}</SelectItem>
               ))}
@@ -280,10 +281,10 @@ const Customers = () => {
           
           <Select value={locationFilter || undefined} onValueChange={(value) => setLocationFilter(value || null)}>
             <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Location" />
+              <SelectValue placeholder="Localização" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Locations</SelectItem>
+              <SelectItem value="all">Todas Localizações</SelectItem>
               {locations.map((location) => (
                 <SelectItem key={location} value={location}>{location}</SelectItem>
               ))}
@@ -292,100 +293,82 @@ const Customers = () => {
           
           <Button variant="outline" onClick={handleResetFilters}>
             <Filter className="mr-2 h-4 w-4" />
-            Reset
+            Limpar
           </Button>
         </div>
       </div>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Lista de Clientes</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="px-4 py-3 text-left font-medium">Nome</th>
-                  <th className="px-4 py-3 text-left font-medium">Contato</th>
-                  <th className="px-4 py-3 text-left font-medium">Localização</th>
-                  <th className="px-4 py-3 text-left font-medium">Orçamento</th>
-                  <th className="px-4 py-3 text-left font-medium">Especificações</th>
-                  <th className="px-4 py-3 text-left font-medium">Modalidade</th>
-                  <th className="px-4 py-3 text-left font-medium">Status</th>
-                  <th className="px-4 py-3 text-left font-medium">Último Contato</th>
-                  <th className="px-4 py-3 text-right font-medium">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredCustomers.length > 0 ? (
-                  filteredCustomers.map((customer) => (
-                    <tr key={customer.id} className="border-b hover:bg-muted/50">
-                      <td className="px-4 py-3">{customer.name}</td>
-                      <td className="px-4 py-3">
-                        <div className="text-sm">
-                          <div>{customer.email}</div>
-                          <div className="text-muted-foreground">{customer.phone}</div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">{customer.location}</td>
-                      <td className="px-4 py-3">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL'
-                        }).format(customer.budget)}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="text-sm">
-                          <div>{customer.specifications.bedrooms} quartos</div>
-                          <div>{customer.specifications.bathrooms} banheiros</div>
-                          <div>{customer.specifications.parkingSpots} vagas</div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className={`inline-block rounded px-2 py-1 text-xs font-medium ${getModalityColor(customer.modality)}`}>
-                          {customer.modality}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <Badge variant={getBadgeVariant(customer.status) as any}>
-                          {customer.status}
-                        </Badge>
-                      </td>
-                      <td className="px-4 py-3">{new Date(customer.lastContact).toLocaleDateString('pt-BR')}</td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex justify-end space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleAction("Contatar", customer.id)}
-                          >
-                            Contatar
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleAction("Editar", customer.id)}
-                          >
-                            Editar
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={9} className="px-4 py-6 text-center text-muted-foreground">
-                      Nenhum cliente encontrado com os critérios selecionados
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-      
+
+      {filteredCustomers.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredCustomers.map((customer) => (
+            <Card key={customer.id} className="overflow-hidden">
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage src={`https://avatar.vercel.sh/${customer.email}`} alt={customer.name} />
+                      <AvatarFallback>{customer.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h3 className="font-semibold text-lg">{customer.name}</h3>
+                      <Badge variant={getBadgeVariant(customer.status) as any} className="mt-1">
+                        {customer.status}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="ghost" size="icon" onClick={() => handleAction("Mensagem", customer.id)}>
+                      <MessageCircle className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleAction("Ligar", customer.id)}>
+                      <Phone className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleAction("Editar", customer.id)}>
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">Objetivo:</span>
+                    <span className={`px-2 py-1 rounded ${getModalityColor(customer.modality)}`}>
+                      {customer.modality}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">Localização:</span>
+                    <span>{customer.location}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">Orçamento:</span>
+                    <span>
+                      {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                      }).format(customer.budget)}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">Especificidades:</span>
+                    <span>
+                      {customer.specifications.bedrooms} quartos, {customer.specifications.bathrooms} banheiros, {customer.specifications.parkingSpots} vagas
+                    </span>
+                  </div>
+                  <div className="text-muted-foreground text-xs mt-4">
+                    Último contato: {new Date(customer.lastContact).toLocaleDateString('pt-BR')}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-10 text-muted-foreground">
+          Nenhum cliente encontrado com os critérios selecionados
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
           Mostrando {filteredCustomers.length} de {customers.length} clientes
