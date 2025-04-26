@@ -201,36 +201,36 @@ const Customers = () => {
         </div>
         
         <div className="flex flex-wrap gap-2 sm:flex-nowrap">
-          <Select value={statusFilter || ""} onValueChange={(value) => setStatusFilter(value || null)}>
+          <Select value={statusFilter || undefined} onValueChange={(value) => setStatusFilter(value || null)}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Statuses</SelectItem>
+              <SelectItem value="all">All Statuses</SelectItem>
               {statuses.map((status) => (
                 <SelectItem key={status} value={status}>{status}</SelectItem>
               ))}
             </SelectContent>
           </Select>
           
-          <Select value={modalityFilter || ""} onValueChange={(value) => setModalityFilter(value || null)}>
+          <Select value={modalityFilter || undefined} onValueChange={(value) => setModalityFilter(value || null)}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Modality" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Types</SelectItem>
+              <SelectItem value="all">All Types</SelectItem>
               {modalities.map((modality) => (
                 <SelectItem key={modality} value={modality}>{modality}</SelectItem>
               ))}
             </SelectContent>
           </Select>
           
-          <Select value={locationFilter || ""} onValueChange={(value) => setLocationFilter(value || null)}>
+          <Select value={locationFilter || undefined} onValueChange={(value) => setLocationFilter(value || null)}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Location" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Locations</SelectItem>
+              <SelectItem value="all">All Locations</SelectItem>
               {locations.map((location) => (
                 <SelectItem key={location} value={location}>{location}</SelectItem>
               ))}
