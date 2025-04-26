@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,21 +13,33 @@ interface Customer {
   email: string;
   phone: string;
   location: string;
-  modality: "Rent" | "Purchase" | "Information";
-  status: "Lead" | "Qualified" | "Meeting" | "Contract" | "Closed";
+  modality: "Aluguel" | "Compra" | "Informações";
+  status: "Lead" | "Qualificado" | "Reunião" | "Contrato" | "Fechado";
   lastContact: string;
+  budget: number;
+  specifications: {
+    bedrooms: number;
+    bathrooms: number;
+    parkingSpots: number;
+  };
 }
 
 const customers: Customer[] = [
   {
     id: "1",
-    name: "John Smith",
-    email: "john.smith@example.com",
-    phone: "(555) 123-4567",
-    location: "Downtown",
-    modality: "Purchase",
-    status: "Qualified",
-    lastContact: "2023-04-20"
+    name: "João Silva",
+    email: "joao.silva@exemplo.com",
+    phone: "(11) 98765-4321",
+    location: "Centro",
+    modality: "Compra",
+    status: "Qualificado",
+    lastContact: "2023-04-20",
+    budget: 500000,
+    specifications: {
+      bedrooms: 2,
+      bathrooms: 1,
+      parkingSpots: 1
+    }
   },
   {
     id: "2",
@@ -36,9 +47,15 @@ const customers: Customer[] = [
     email: "sarah.j@example.com",
     phone: "(555) 987-6543",
     location: "Westside",
-    modality: "Rent",
+    modality: "Aluguel",
     status: "Lead",
-    lastContact: "2023-04-22"
+    lastContact: "2023-04-22",
+    budget: 300000,
+    specifications: {
+      bedrooms: 1,
+      bathrooms: 1,
+      parkingSpots: 0
+    }
   },
   {
     id: "3",
@@ -46,9 +63,15 @@ const customers: Customer[] = [
     email: "michael.r@example.com",
     phone: "(555) 456-7890",
     location: "Eastside",
-    modality: "Purchase",
-    status: "Meeting",
-    lastContact: "2023-04-18"
+    modality: "Compra",
+    status: "Reunião",
+    lastContact: "2023-04-18",
+    budget: 750000,
+    specifications: {
+      bedrooms: 3,
+      bathrooms: 2,
+      parkingSpots: 2
+    }
   },
   {
     id: "4",
@@ -56,9 +79,15 @@ const customers: Customer[] = [
     email: "emily.d@example.com",
     phone: "(555) 247-8901",
     location: "Suburbs",
-    modality: "Information",
+    modality: "Informações",
     status: "Lead",
-    lastContact: "2023-04-23"
+    lastContact: "2023-04-23",
+    budget: 200000,
+    specifications: {
+      bedrooms: 1,
+      bathrooms: 1,
+      parkingSpots: 1
+    }
   },
   {
     id: "5",
@@ -66,9 +95,15 @@ const customers: Customer[] = [
     email: "david.w@example.com",
     phone: "(555) 789-0123",
     location: "Downtown",
-    modality: "Rent",
-    status: "Contract",
-    lastContact: "2023-04-15"
+    modality: "Aluguel",
+    status: "Contrato",
+    lastContact: "2023-04-15",
+    budget: 400000,
+    specifications: {
+      bedrooms: 2,
+      bathrooms: 1,
+      parkingSpots: 1
+    }
   },
   {
     id: "6",
@@ -76,9 +111,15 @@ const customers: Customer[] = [
     email: "jennifer.l@example.com",
     phone: "(555) 234-5678",
     location: "Westside",
-    modality: "Purchase",
-    status: "Closed",
-    lastContact: "2023-04-10"
+    modality: "Compra",
+    status: "Fechado",
+    lastContact: "2023-04-10",
+    budget: 600000,
+    specifications: {
+      bedrooms: 3,
+      bathrooms: 2,
+      parkingSpots: 2
+    }
   },
   {
     id: "7",
@@ -86,9 +127,15 @@ const customers: Customer[] = [
     email: "robert.b@example.com",
     phone: "(555) 345-6789",
     location: "Eastside",
-    modality: "Rent",
-    status: "Qualified",
-    lastContact: "2023-04-19"
+    modality: "Aluguel",
+    status: "Qualificado",
+    lastContact: "2023-04-19",
+    budget: 350000,
+    specifications: {
+      bedrooms: 1,
+      bathrooms: 1,
+      parkingSpots: 0
+    }
   },
   {
     id: "8",
@@ -96,9 +143,15 @@ const customers: Customer[] = [
     email: "lisa.m@example.com",
     phone: "(555) 456-7890",
     location: "Suburbs",
-    modality: "Information",
+    modality: "Informações",
     status: "Lead",
-    lastContact: "2023-04-21"
+    lastContact: "2023-04-21",
+    budget: 250000,
+    specifications: {
+      bedrooms: 1,
+      bathrooms: 1,
+      parkingSpots: 1
+    }
   },
 ];
 
@@ -112,13 +165,13 @@ const Customers = () => {
     switch (status) {
       case "Lead":
         return "secondary";
-      case "Qualified":
+      case "Qualificado":
         return "default";
-      case "Meeting":
+      case "Reunião":
         return "outline";
-      case "Contract":
+      case "Contrato":
         return "destructive";
-      case "Closed":
+      case "Fechado":
         return "secondary";
       default:
         return "default";
@@ -127,11 +180,11 @@ const Customers = () => {
   
   const getModalityColor = (modality: string) => {
     switch (modality) {
-      case "Rent":
+      case "Aluguel":
         return "bg-blue-100 text-blue-800";
-      case "Purchase":
+      case "Compra":
         return "bg-green-100 text-green-800";
-      case "Information":
+      case "Informações":
         return "bg-purple-100 text-purple-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -183,9 +236,9 @@ const Customers = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Customers</h2>
+        <h2 className="text-2xl font-bold mb-2">Clientes</h2>
         <p className="text-muted-foreground">
-          Manage and monitor your leads and customers
+          Gerencie e monitore seus leads e clientes
         </p>
       </div>
       
@@ -246,20 +299,22 @@ const Customers = () => {
       
       <Card>
         <CardHeader>
-          <CardTitle>Customer List</CardTitle>
+          <CardTitle>Lista de Clientes</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="px-4 py-3 text-left font-medium">Name</th>
-                  <th className="px-4 py-3 text-left font-medium">Contact</th>
-                  <th className="px-4 py-3 text-left font-medium">Location</th>
-                  <th className="px-4 py-3 text-left font-medium">Modality</th>
+                  <th className="px-4 py-3 text-left font-medium">Nome</th>
+                  <th className="px-4 py-3 text-left font-medium">Contato</th>
+                  <th className="px-4 py-3 text-left font-medium">Localização</th>
+                  <th className="px-4 py-3 text-left font-medium">Orçamento</th>
+                  <th className="px-4 py-3 text-left font-medium">Especificações</th>
+                  <th className="px-4 py-3 text-left font-medium">Modalidade</th>
                   <th className="px-4 py-3 text-left font-medium">Status</th>
-                  <th className="px-4 py-3 text-left font-medium">Last Contact</th>
-                  <th className="px-4 py-3 text-right font-medium">Actions</th>
+                  <th className="px-4 py-3 text-left font-medium">Último Contato</th>
+                  <th className="px-4 py-3 text-right font-medium">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -275,6 +330,19 @@ const Customers = () => {
                       </td>
                       <td className="px-4 py-3">{customer.location}</td>
                       <td className="px-4 py-3">
+                        {new Intl.NumberFormat('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL'
+                        }).format(customer.budget)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="text-sm">
+                          <div>{customer.specifications.bedrooms} quartos</div>
+                          <div>{customer.specifications.bathrooms} banheiros</div>
+                          <div>{customer.specifications.parkingSpots} vagas</div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
                         <span className={`inline-block rounded px-2 py-1 text-xs font-medium ${getModalityColor(customer.modality)}`}>
                           {customer.modality}
                         </span>
@@ -284,22 +352,22 @@ const Customers = () => {
                           {customer.status}
                         </Badge>
                       </td>
-                      <td className="px-4 py-3">{new Date(customer.lastContact).toLocaleDateString()}</td>
+                      <td className="px-4 py-3">{new Date(customer.lastContact).toLocaleDateString('pt-BR')}</td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex justify-end space-x-2">
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleAction("Contact", customer.id)}
+                            onClick={() => handleAction("Contatar", customer.id)}
                           >
-                            Contact
+                            Contatar
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleAction("Edit", customer.id)}
+                            onClick={() => handleAction("Editar", customer.id)}
                           >
-                            Edit
+                            Editar
                           </Button>
                         </div>
                       </td>
@@ -307,8 +375,8 @@ const Customers = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-4 py-6 text-center text-muted-foreground">
-                      No customers found matching your criteria
+                    <td colSpan={9} className="px-4 py-6 text-center text-muted-foreground">
+                      Nenhum cliente encontrado com os critérios selecionados
                     </td>
                   </tr>
                 )}
@@ -320,11 +388,11 @@ const Customers = () => {
       
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
-          Showing {filteredCustomers.length} of {customers.length} customers
+          Mostrando {filteredCustomers.length} de {customers.length} clientes
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" disabled>Previous</Button>
-          <Button variant="outline">Next</Button>
+          <Button variant="outline" disabled>Anterior</Button>
+          <Button variant="outline">Próximo</Button>
         </div>
       </div>
     </div>
