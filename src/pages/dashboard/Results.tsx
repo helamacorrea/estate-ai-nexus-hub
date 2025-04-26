@@ -1,193 +1,280 @@
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// Update the results page to change Top Performing Behaviors to Status metrics
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+
+const StatusMetrics = [
+  { name: "Agendamentos", value: 35, color: "#4f46e5" },
+  { name: "Captações", value: 28, color: "#10b981" },
+  { name: "Plantas", value: 22, color: "#f59e0b" },
+  { name: "Temporadas", value: 15, color: "#ef4444" },
+];
+
+const LeadsBySource = [
+  {
+    name: "Facebook",
+    leads: 12,
+  },
+  {
+    name: "Instagram",
+    leads: 19,
+  },
+  {
+    name: "Google",
+    leads: 5,
+  },
+  {
+    name: "Indicação",
+    leads: 8,
+  },
+  {
+    name: "Site",
+    leads: 14,
+  },
+  {
+    name: "WhatsApp",
+    leads: 27,
+  },
+];
+
+const ConversionData = [
+  {
+    name: "Visitas",
+    leads: 70,
+    conversions: 30,
+  },
+  {
+    name: "Propostas",
+    leads: 40,
+    conversions: 15,
+  },
+  {
+    name: "Vendas",
+    leads: 15,
+    conversions: 8,
+  },
+];
 
 const Results = () => {
-  const [period, setPeriod] = useState("month");
-
-  // Sample data for charts
-  const conversationData = [
-    { name: "Jan", value: 45 },
-    { name: "Feb", value: 52 },
-    { name: "Mar", value: 61 },
-    { name: "Apr", value: 58 },
-    { name: "May", value: 75 },
-    { name: "Jun", value: 87 },
-    { name: "Jul", value: 91 },
-  ];
-
-  const leadsByModalityData = [
-    { name: "Rental", value: 35 },
-    { name: "Purchase", value: 45 },
-    { name: "Scheduling", value: 20 },
-  ];
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
-
-  const leadResponseData = [
-    { name: "Mon", responding: 12, notResponding: 8 },
-    { name: "Tue", responding: 15, notResponding: 5 },
-    { name: "Wed", responding: 18, notResponding: 7 },
-    { name: "Thu", responding: 22, notResponding: 9 },
-    { name: "Fri", responding: 25, notResponding: 10 },
-    { name: "Sat", responding: 14, notResponding: 6 },
-    { name: "Sun", responding: 10, notResponding: 4 },
-  ];
-
-  const cards = [
-    { title: "Total Conversations", value: "485", change: "+12.5%", changeType: "positive" },
-    { title: "Response Rate", value: "72%", change: "+5.2%", changeType: "positive" },
-    { title: "Conversion Rate", value: "8.3%", change: "-2.1%", changeType: "negative" },
-    { title: "Avg. Response Time", value: "3.2s", change: "-42%", changeType: "positive" },
-  ];
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Results & Analytics</h2>
-        <Tabs defaultValue="month" value={period} onValueChange={setPeriod}>
-          <TabsList>
-            <TabsTrigger value="week">Week</TabsTrigger>
-            <TabsTrigger value="month">Month</TabsTrigger>
-            <TabsTrigger value="year">Year</TabsTrigger>
-          </TabsList>
-        </Tabs>
+      <div>
+        <h2 className="text-2xl font-bold mb-2">Resultados e Análises</h2>
+        <p className="text-muted-foreground">
+          Métricas de desempenho e estatísticas da sua assistente virtual
+        </p>
       </div>
-
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {cards.map((card, i) => (
-          <Card key={i}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {card.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
-              <p className={`text-xs mt-1 ${card.changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
-                {card.change} from last period
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Charts */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Conversations</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={conversationData}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="value" stroke="#2563eb" activeDot={{ r: 8 }} strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Lead Response Rate</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={leadResponseData}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="responding" fill="#2563eb" />
-                  <Bar dataKey="notResponding" fill="#ef4444" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Leads by Modality</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={leadsByModalityData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  >
-                    {leadsByModalityData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-0">
-            <CardTitle>Top Performing Behaviors</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                { name: "Purchase - Assertive", value: "8.7%" },
-                { name: "Rent - Informative", value: "7.2%" },
-                { name: "Scheduling - Friendly", value: "6.5%" },
-                { name: "Floor Plan - Detailed", value: "5.9%" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <span className="text-sm font-medium">{item.name}</span>
-                  <div className="ml-auto flex items-center">
-                    <span className="font-semibold">{item.value}</span>
-                    <div className={`ml-2 h-2 w-2 rounded-full ${i === 0 ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                  </div>
+      
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="leads">Leads</TabsTrigger>
+          <TabsTrigger value="conversations">Conversas</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="overview" className="mt-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Total de Leads</CardTitle>
+                <CardDescription>Últimos 30 dias</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-4xl font-bold">85</div>
+                <p className="text-sm text-muted-foreground">+12% comparado ao mês anterior</p>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Taxa de Conversão</CardTitle>
+                <CardDescription>Leads para clientes</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-4xl font-bold">24%</div>
+                <p className="text-sm text-muted-foreground">+5% comparado ao mês anterior</p>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Tempo de Resposta</CardTitle>
+                <CardDescription>Média</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-4xl font-bold">45s</div>
+                <p className="text-sm text-muted-foreground">-12s comparado ao mês anterior</p>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Agendamentos</CardTitle>
+                <CardDescription>Últimos 30 dias</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-4xl font-bold">32</div>
+                <p className="text-sm text-muted-foreground">+8% comparado ao mês anterior</p>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="grid gap-6 mt-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <CardTitle>Taxa de Conversão</CardTitle>
+                <CardDescription>Funil de vendas dos últimos 30 dias</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={ConversionData}
+                      margin={{
+                        top: 20,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="leads" stackId="a" fill="#8884d8" name="Leads" />
+                      <Bar dataKey="conversions" stackId="a" fill="#82ca9d" name="Conversões" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Status dos Atendimentos</CardTitle>
+                <CardDescription>Distribuição atual</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={StatusMetrics}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="value"
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {StatusMetrics.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="grid gap-6 mt-6 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Origem dos Leads</CardTitle>
+                <CardDescription>De onde seus leads estão vindo</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={LeadsBySource}
+                      layout="vertical"
+                      margin={{
+                        top: 20,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <XAxis type="number" />
+                      <YAxis dataKey="name" type="category" width={80} />
+                      <Tooltip />
+                      <Bar dataKey="leads" fill="#0FFCBE" name="Leads" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Horários de Pico</CardTitle>
+                <CardDescription>Quando seus leads estão mais ativos</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={[
+                        { hour: "8-10h", leads: 12 },
+                        { hour: "10-12h", leads: 18 },
+                        { hour: "12-14h", leads: 5 },
+                        { hour: "14-16h", leads: 8 },
+                        { hour: "16-18h", leads: 16 },
+                        { hour: "18-20h", leads: 22 },
+                        { hour: "20-22h", leads: 14 },
+                      ]}
+                      margin={{
+                        top: 20,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <XAxis dataKey="hour" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="leads" fill="#0A1828" name="Leads" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="leads" className="mt-6">
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Leads Detalhados</CardTitle>
+                <CardDescription>Análise completa de leads</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>Conteúdo detalhado sobre leads estará disponível em breve</p>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="conversations" className="mt-6">
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Análise de Conversas</CardTitle>
+                <CardDescription>Insights detalhados sobre conversas</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>Análise detalhada de conversas estará disponível em breve</p>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

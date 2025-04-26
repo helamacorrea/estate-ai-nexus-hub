@@ -2,11 +2,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { QrCode } from "lucide-react";
 
-const WhatsAppConnection = () => {
+const AddGabbi = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Conexão WhatsApp</h2>
+        <h2 className="text-2xl font-bold mb-2">Adicionar Gabbi</h2>
         <p className="text-muted-foreground">
           Conecte a Gabbi ao seu WhatsApp para começar a automatizar seu atendimento
         </p>
@@ -36,4 +36,4 @@ const WhatsAppConnection = () => {
   );
 };
 
-export default WhatsAppConnection;
+export default AddGabbi;

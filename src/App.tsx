@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,7 +16,7 @@ import TestBot from "./pages/dashboard/TestBot";
 import Results from "./pages/dashboard/Results";
 import Customers from "./pages/dashboard/Customers";
 import ProtectedRoute from "./components/ProtectedRoute";
-import WhatsAppConnection from "./pages/dashboard/WhatsAppConnection";
+import AddGabbi from "./pages/dashboard/AddGabbi";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +38,7 @@ const App = () => (
             }>
               <Route index element={<Results />} />
               <Route path="connections" element={<Connections />} />
-              <Route path="whatsapp" element={<WhatsAppConnection />} />
+              <Route path="add-gabbi" element={<AddGabbi />} />
               <Route path="bot-settings" element={<BotSettings />} />
               <Route path="account" element={<Account />} />
               <Route path="test-bot" element={<TestBot />} />

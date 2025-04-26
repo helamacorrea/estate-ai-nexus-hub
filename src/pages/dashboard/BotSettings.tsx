@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,10 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
+import { Upload, Undo, Redo } from "lucide-react";
 
 interface BotSettings {
   name: string;
@@ -27,61 +27,98 @@ interface BotSettings {
     floorPlan: string;
     capture: string;
   };
-  responseStyle: {
-    friendliness: number;
-    detail: number;
-    formality: number;
-  };
 }
+
+const defaultBehaviors = {
+  rental: "Ressaltar comodidades, termos de contrato e características do bairro.",
+  purchase: "Focar no potencial de investimento, características do imóvel e tendências de mercado.",
+  scheduling: "Ser acolhedor mas direto, oferecendo horários específicos.",
+  floorPlan: "Ser detalhado sobre dimensões, benefícios do layout e possíveis disposições de móveis.",
+  capture: "Fazer perguntas qualificadoras sobre orçamento, cronograma e preferências."
+};
 
 const BotSettings = () => {
   const [selectedTab, setSelectedTab] = useState("general");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const defaultValues: BotSettings = {
-    name: "RealtyBot",
+    name: "Gabbi",
     imageUrl: "https://github.com/shadcn.png",
     voice: "female",
-    companyName: "Real Estate Pro",
-    companyDescription: "A leading real estate company specializing in residential and commercial properties.",
-    behaviors: {
-      rental: "Highlight amenities, lease terms, and neighborhood features.",
-      purchase: "Focus on investment potential, property features, and market trends.",
-      scheduling: "Be accommodating but direct, offering specific time slots.",
-      floorPlan: "Be detailed about dimensions, layout benefits, and potential furniture arrangements.",
-      capture: "Ask qualifying questions about budget, timeline, and preferences."
-    },
-    responseStyle: {
-      friendliness: 70,
-      detail: 60,
-      formality: 50
-    }
+    companyName: "Imobiliária Pro",
+    companyDescription: "Uma imobiliária líder especializada em imóveis residenciais e comerciais.",
+    behaviors: { ...defaultBehaviors }
   };
   
   const form = useForm<BotSettings>({ defaultValues });
   
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        form.setValue("imageUrl", reader.result as string);
+        toast({
+          title: "Imagem enviada",
+          description: "Sua imagem de perfil foi atualizada com sucesso.",
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  const triggerFileUpload = () => {
+    fileInputRef.current?.click();
+  };
+  
+  const handleSaveBehavior = (field: keyof typeof defaultBehaviors) => {
+    toast({
+      title: "Comportamento salvo",
+      description: `O comportamento para ${getBehaviorTitle(field)} foi atualizado com sucesso.`,
+    });
+  };
+  
+  const resetBehavior = (field: keyof typeof defaultBehaviors) => {
+    form.setValue(`behaviors.${field}`, defaultBehaviors[field]);
+    toast({
+      title: "Comportamento restaurado",
+      description: `O comportamento para ${getBehaviorTitle(field)} foi restaurado para o padrão.`,
+    });
+  };
+  
+  const getBehaviorTitle = (field: keyof typeof defaultBehaviors) => {
+    const titles: Record<string, string> = {
+      rental: "Consultas de Aluguel",
+      purchase: "Consultas de Compra",
+      scheduling: "Agendamentos",
+      floorPlan: "Plantas",
+      capture: "Captação de Leads"
+    };
+    return titles[field] || field;
+  };
+
   const onSubmit = (data: BotSettings) => {
     console.log("Form submitted:", data);
     toast({
-      title: "Settings saved",
-      description: "Your bot settings have been updated successfully.",
+      title: "Configurações salvas",
+      description: "As configurações do seu bot foram atualizadas com sucesso.",
     });
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Bot Settings</h2>
+        <h2 className="text-2xl font-bold mb-2">Configurações do Bot</h2>
         <p className="text-muted-foreground">
-          Customize your AI assistant's personality, behaviors, and appearance
+          Personalize a personalidade, comportamentos e aparência da sua assistente IA
         </p>
       </div>
       
       <Tabs value={selectedTab} onValueChange={setSelectedTab}>
         <TabsList>
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="behaviors">Behaviors</TabsTrigger>
-          <TabsTrigger value="personality">Personality</TabsTrigger>
-          <TabsTrigger value="company">Company Info</TabsTrigger>
+          <TabsTrigger value="general">Geral</TabsTrigger>
+          <TabsTrigger value="behaviors">Comportamentos</TabsTrigger>
+          <TabsTrigger value="company">Informações da Empresa</TabsTrigger>
         </TabsList>
         
         <Form {...form}>
@@ -89,9 +126,9 @@ const BotSettings = () => {
             <TabsContent value="general" className="mt-6 space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Basic Information</CardTitle>
+                  <CardTitle>Informações Básicas</CardTitle>
                   <CardDescription>
-                    Set your bot's name, appearance, and voice
+                    Configure o nome, aparência e voz do seu bot
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -100,12 +137,12 @@ const BotSettings = () => {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Bot Name</FormLabel>
+                        <FormLabel>Nome do Bot</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
                         <FormDescription>
-                          This is how your bot will identify itself to users
+                          Este é como seu bot se identificará para os usuários
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -113,7 +150,7 @@ const BotSettings = () => {
                   />
                   
                   <div className="space-y-2">
-                    <Label>Profile Picture</Label>
+                    <Label>Foto de Perfil</Label>
                     <div className="flex items-center space-x-4">
                       <Controller
                         control={form.control}
@@ -125,13 +162,31 @@ const BotSettings = () => {
                               <AvatarFallback>AI</AvatarFallback>
                             </Avatar>
                             <div className="space-y-2 flex-1">
-                              <Input 
-                                id="imageUrl"
-                                type="text"
-                                {...field}
-                              />
+                              <div className="flex gap-2">
+                                <Input 
+                                  id="imageUrl"
+                                  type="text"
+                                  {...field}
+                                  className="flex-1"
+                                />
+                                <Button 
+                                  type="button" 
+                                  variant="outline" 
+                                  onClick={triggerFileUpload}
+                                >
+                                  <Upload className="h-4 w-4 mr-2" />
+                                  Enviar
+                                </Button>
+                                <input
+                                  ref={fileInputRef}
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleImageUpload}
+                                  className="hidden"
+                                />
+                              </div>
                               <p className="text-xs text-muted-foreground">
-                                Enter the URL of an image or upload a new one
+                                Insira a URL de uma imagem ou faça upload de uma nova
                               </p>
                             </div>
                           </>
@@ -145,253 +200,99 @@ const BotSettings = () => {
                     name="voice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Voice Type</FormLabel>
+                        <FormLabel>Tipo de Voz</FormLabel>
                         <Select 
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a voice" />
+                              <SelectValue placeholder="Selecione uma voz" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="neutral">Neutral</SelectItem>
+                            <SelectItem value="female">Feminina</SelectItem>
+                            <SelectItem value="male">Masculina</SelectItem>
+                            <SelectItem value="neutral">Neutra</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormDescription>
-                          Choose the voice your AI will use when speaking
+                          Escolha a voz que sua IA usará ao falar
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </CardContent>
+                <CardFooter className="flex justify-end">
+                  <Button type="submit">Salvar Alterações</Button>
+                </CardFooter>
               </Card>
             </TabsContent>
             
             <TabsContent value="behaviors" className="mt-6 space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Behavior Patterns</CardTitle>
+                  <CardTitle>Padrões de Comportamento</CardTitle>
                   <CardDescription>
-                    Customize how your AI responds in different scenarios
+                    Personalize como sua IA responde em diferentes cenários
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="behaviors.rental"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Rental Inquiries</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            {...field} 
-                            placeholder="How should your AI handle rental inquiries?"
-                            rows={3}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Describe how your AI should respond to rental inquiries
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="behaviors.purchase"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Purchase Inquiries</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            {...field} 
-                            placeholder="How should your AI handle purchase inquiries?"
-                            rows={3}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Describe how your AI should respond to purchase inquiries
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="behaviors.scheduling"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Scheduling</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            {...field} 
-                            placeholder="How should your AI handle scheduling requests?"
-                            rows={3}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Describe how your AI should handle appointment scheduling
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="behaviors.floorPlan"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Floor Plan Requests</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            {...field} 
-                            placeholder="How should your AI respond to floor plan questions?"
-                            rows={3}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Describe how your AI should discuss floor plans and layouts
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="behaviors.capture"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Lead Capture</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            {...field} 
-                            placeholder="How should your AI capture lead information?"
-                            rows={3}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Define how your AI should gather contact information and preferences
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="personality" className="mt-6 space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Personality Traits</CardTitle>
-                  <CardDescription>
-                    Adjust sliders to fine-tune your bot's personality
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-8">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <Label>Friendliness</Label>
-                        <span className="text-sm text-muted-foreground">
-                          {form.watch("responseStyle.friendliness")}%
-                        </span>
-                      </div>
-                      <Controller
-                        control={form.control}
-                        name="responseStyle.friendliness"
-                        render={({ field }) => (
-                          <Slider
-                            defaultValue={[field.value]}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onValueChange={(vals) => field.onChange(vals[0])}
-                          />
-                        )}
-                      />
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Professional</span>
-                        <span>Friendly</span>
-                      </div>
-                    </div>
+                  {Object.entries(defaultBehaviors).map(([key, defaultValue]) => {
+                    const fieldKey = `behaviors.${key}` as const;
+                    const behaviorTitle = getBehaviorTitle(key as keyof typeof defaultBehaviors);
                     
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <Label>Detail Level</Label>
-                        <span className="text-sm text-muted-foreground">
-                          {form.watch("responseStyle.detail")}%
-                        </span>
-                      </div>
-                      <Controller
+                    return (
+                      <FormField
+                        key={key}
                         control={form.control}
-                        name="responseStyle.detail"
+                        name={fieldKey}
                         render={({ field }) => (
-                          <Slider
-                            defaultValue={[field.value]}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onValueChange={(vals) => field.onChange(vals[0])}
-                          />
+                          <FormItem>
+                            <FormLabel className="text-base font-semibold">{behaviorTitle}</FormLabel>
+                            <FormDescription className="mt-1 mb-2">
+                              Descreva como sua IA deve responder a {behaviorTitle.toLowerCase()}
+                            </FormDescription>
+                            <div className="space-y-2">
+                              <div className="flex gap-2">
+                                <Button variant="outline" size="icon" type="button">
+                                  <Undo className="h-4 w-4" />
+                                </Button>
+                                <Button variant="outline" size="icon" type="button">
+                                  <Redo className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              <FormControl>
+                                <Textarea 
+                                  {...field} 
+                                  placeholder={`Como sua IA deve lidar com ${behaviorTitle.toLowerCase()}?`}
+                                  rows={3}
+                                />
+                              </FormControl>
+                              <div className="flex justify-between items-center pt-1">
+                                <Button
+                                  type="button"
+                                  variant="link"
+                                  className="p-0 h-auto text-sm"
+                                  onClick={() => resetBehavior(key as keyof typeof defaultBehaviors)}
+                                >
+                                  Restaurar padrão
+                                </Button>
+                                <Button
+                                  type="button"
+                                  onClick={() => handleSaveBehavior(key as keyof typeof defaultBehaviors)}
+                                >
+                                  Salvar
+                                </Button>
+                              </div>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
                         )}
                       />
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Concise</span>
-                        <span>Detailed</span>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <Label>Formality</Label>
-                        <span className="text-sm text-muted-foreground">
-                          {form.watch("responseStyle.formality")}%
-                        </span>
-                      </div>
-                      <Controller
-                        control={form.control}
-                        name="responseStyle.formality"
-                        render={({ field }) => (
-                          <Slider
-                            defaultValue={[field.value]}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onValueChange={(vals) => field.onChange(vals[0])}
-                          />
-                        )}
-                      />
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Casual</span>
-                        <span>Formal</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="grid gap-4 pt-4">
-                    <div className="flex items-center space-x-2">
-                      <Switch id="use-emojis" />
-                      <Label htmlFor="use-emojis">Use emojis in responses</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Switch id="send-follow-ups" checked />
-                      <Label htmlFor="send-follow-ups">Send follow-up messages after initial contact</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Switch id="use-client-name" checked />
-                      <Label htmlFor="use-client-name">Address clients by name when available</Label>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -399,9 +300,9 @@ const BotSettings = () => {
             <TabsContent value="company" className="mt-6 space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Company Information</CardTitle>
+                  <CardTitle>Informações da Empresa</CardTitle>
                   <CardDescription>
-                    Provide details about your company for the AI to reference
+                    Forneça detalhes sobre sua empresa para referência da IA
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -410,7 +311,7 @@ const BotSettings = () => {
                     name="companyName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Company Name</FormLabel>
+                        <FormLabel>Nome da Empresa</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -424,16 +325,16 @@ const BotSettings = () => {
                     name="companyDescription"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Company Description</FormLabel>
+                        <FormLabel>Descrição da Empresa</FormLabel>
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            placeholder="Brief description of your company"
+                            placeholder="Breve descrição da sua empresa"
                             rows={3}
                           />
                         </FormControl>
                         <FormDescription>
-                          Include your company's specialties, areas served, and unique selling points
+                          Inclua as especialidades, áreas atendidas e diferenciais da sua empresa
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -443,43 +344,42 @@ const BotSettings = () => {
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Office Hours</Label>
-                        <Input placeholder="e.g., Mon-Fri 9am-5pm" />
+                        <Label>Horário de Atendimento</Label>
+                        <Input placeholder="ex., Seg-Sex 9h-17h" />
                       </div>
                       <div className="space-y-2">
-                        <Label>Contact Phone</Label>
-                        <Input placeholder="e.g., (555) 123-4567" />
+                        <Label>Telefone de Contato</Label>
+                        <Input placeholder="ex., (11) 99999-9999" />
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Office Address</Label>
-                        <Input placeholder="Main office address" />
+                        <Label>Endereço do Escritório</Label>
+                        <Input placeholder="Endereço do escritório principal" />
                       </div>
                       <div className="space-y-2">
                         <Label>Website</Label>
-                        <Input placeholder="e.g., www.yourcompany.com" />
+                        <Input placeholder="ex., www.suaempresa.com" />
                       </div>
                     </div>
                     
                     <div className="space-y-2">
-                      <Label>Areas Served</Label>
-                      <Input placeholder="e.g., Greater Boston Area, NYC Metro, etc." />
+                      <Label>Áreas Atendidas</Label>
+                      <Input placeholder="ex., Grande São Paulo, Litoral Paulista, etc." />
                     </div>
                     
                     <div className="space-y-2">
-                      <Label>Services Offered</Label>
-                      <Textarea placeholder="List the main services your company offers" rows={2} />
+                      <Label>Serviços Oferecidos</Label>
+                      <Textarea placeholder="Liste os principais serviços que sua empresa oferece" rows={2} />
                     </div>
                   </div>
                 </CardContent>
+                <CardFooter className="flex justify-end">
+                  <Button type="submit">Salvar Alterações</Button>
+                </CardFooter>
               </Card>
             </TabsContent>
-            
-            <CardFooter className="flex justify-end border-t p-6">
-              <Button type="submit">Save Changes</Button>
-            </CardFooter>
           </form>
         </Form>
       </Tabs>
