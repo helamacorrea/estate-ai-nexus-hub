@@ -10,9 +10,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 import { Upload, Undo, Redo } from "lucide-react";
+
+type BehaviorKey = 'rental' | 'purchase' | 'scheduling' | 'floorPlan' | 'capture';
 
 interface BotSettings {
   name: string;
@@ -29,7 +30,7 @@ interface BotSettings {
   };
 }
 
-const defaultBehaviors = {
+const defaultBehaviors: Record<BehaviorKey, string> = {
   rental: "Ressaltar comodidades, termos de contrato e características do bairro.",
   purchase: "Focar no potencial de investimento, características do imóvel e tendências de mercado.",
   scheduling: "Ser acolhedor mas direto, oferecendo horários específicos.",
@@ -71,30 +72,30 @@ const BotSettings = () => {
     fileInputRef.current?.click();
   };
   
-  const handleSaveBehavior = (field: keyof typeof defaultBehaviors) => {
+  const handleSaveBehavior = (field: BehaviorKey) => {
     toast({
       title: "Comportamento salvo",
       description: `O comportamento para ${getBehaviorTitle(field)} foi atualizado com sucesso.`,
     });
   };
   
-  const resetBehavior = (field: keyof typeof defaultBehaviors) => {
-    form.setValue(`behaviors.${field}`, defaultBehaviors[field]);
+  const resetBehavior = (field: BehaviorKey) => {
+    form.setValue(`behaviors.${field}` as any, defaultBehaviors[field]);
     toast({
       title: "Comportamento restaurado",
       description: `O comportamento para ${getBehaviorTitle(field)} foi restaurado para o padrão.`,
     });
   };
   
-  const getBehaviorTitle = (field: keyof typeof defaultBehaviors) => {
-    const titles: Record<string, string> = {
+  const getBehaviorTitle = (field: BehaviorKey) => {
+    const titles: Record<BehaviorKey, string> = {
       rental: "Consultas de Aluguel",
       purchase: "Consultas de Compra",
       scheduling: "Agendamentos",
       floorPlan: "Plantas",
       capture: "Captação de Leads"
     };
-    return titles[field] || field;
+    return titles[field];
   };
 
   const onSubmit = (data: BotSettings) => {
@@ -240,57 +241,59 @@ const BotSettings = () => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {Object.entries(defaultBehaviors).map(([key, defaultValue]) => {
-                    const fieldKey = `behaviors.${key}` as const;
-                    const behaviorTitle = getBehaviorTitle(key as keyof typeof defaultBehaviors);
+                    const fieldKey = key as BehaviorKey;
+                    const behaviorTitle = getBehaviorTitle(fieldKey);
                     
                     return (
-                      <FormField
-                        key={key}
-                        control={form.control}
-                        name={fieldKey}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-base font-semibold">{behaviorTitle}</FormLabel>
-                            <FormDescription className="mt-1 mb-2">
-                              Descreva como sua IA deve responder a {behaviorTitle.toLowerCase()}
-                            </FormDescription>
-                            <div className="space-y-2">
-                              <div className="flex gap-2">
-                                <Button variant="outline" size="icon" type="button">
-                                  <Undo className="h-4 w-4" />
-                                </Button>
-                                <Button variant="outline" size="icon" type="button">
-                                  <Redo className="h-4 w-4" />
-                                </Button>
-                              </div>
-                              <FormControl>
-                                <Textarea 
-                                  {...field} 
-                                  placeholder={`Como sua IA deve lidar com ${behaviorTitle.toLowerCase()}?`}
-                                  rows={3}
-                                />
-                              </FormControl>
-                              <div className="flex justify-between items-center pt-1">
-                                <Button
-                                  type="button"
-                                  variant="link"
-                                  className="p-0 h-auto text-sm"
-                                  onClick={() => resetBehavior(key as keyof typeof defaultBehaviors)}
-                                >
-                                  Restaurar padrão
-                                </Button>
-                                <Button
-                                  type="button"
-                                  onClick={() => handleSaveBehavior(key as keyof typeof defaultBehaviors)}
-                                >
-                                  Salvar
-                                </Button>
-                              </div>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div key={key} className="space-y-4">
+                        <div className="flex flex-col">
+                          <h3 className="text-base font-semibold">{behaviorTitle}</h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Descreva como sua IA deve responder a {behaviorTitle.toLowerCase()}
+                          </p>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex gap-2">
+                            <Button variant="outline" size="icon" type="button">
+                              <Undo className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="icon" type="button">
+                              <Redo className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          
+                          <Controller
+                            control={form.control}
+                            name={`behaviors.${fieldKey}` as any}
+                            render={({ field }) => (
+                              <Textarea 
+                                {...field} 
+                                placeholder={`Como sua IA deve lidar com ${behaviorTitle.toLowerCase()}?`}
+                                rows={3}
+                                value={field.value as string}
+                              />
+                            )}
+                          />
+                          
+                          <div className="flex justify-between items-center pt-1">
+                            <Button
+                              type="button"
+                              variant="link"
+                              className="p-0 h-auto text-sm"
+                              onClick={() => resetBehavior(fieldKey)}
+                            >
+                              Restaurar padrão
+                            </Button>
+                            <Button
+                              type="button"
+                              onClick={() => handleSaveBehavior(fieldKey)}
+                            >
+                              Salvar
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     );
                   })}
                 </CardContent>
